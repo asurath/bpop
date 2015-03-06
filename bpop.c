@@ -13,8 +13,7 @@
 #include <ncurses.h>
 #include <time.h>
 
-//Custom stack library I wrote also links to Data.h which has data structure definitions
-
+//Interface for forward facing functions
 #include "inc/bboard.h"
 
 int main() {
