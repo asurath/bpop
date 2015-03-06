@@ -1,0 +1,23 @@
+Author: Arun Surath
+
+How to compile:
+
+	make bpop
+
+How to run:
+	
+	For specific board:
+	
+	1. Put the board you wish to run in the directory bpop will run in
+
+	2. run bpop
+
+	3. select the board from the menu
+
+
+	For random board:
+
+	1. run bpop
+
+	2. select option 1. Random from the menu
+
