@@ -928,7 +928,6 @@ void has_won(Game * game){
 	return;
 }
 
-
 /**
  * Title: cleanup(Game * game);
  * Description: takes a pointer to the game variable and frees all 
@@ -942,16 +941,21 @@ void has_won(Game * game){
  */
 void cleanup(Game * game){
 
-	union Data tempUnion;
+	union Data tempGrid, tempScore;
 
 	for(int i = 0; i < game->nfiles; i++)
 		free(game->files[i]);
 
-	stk_free(game->scoreStack);
+	do{
+		tempScore = stk_pop(game->scoreStack);
+		if(tempScore.i != 0){
+			tempGrid = stk_pop(game->gridStack);
+			destroy_2darr(tempGrid.obj, game->nrows, game->ncols);
+		}
+	}
+	while(tempScore.i != 0);
 	
-	tempUnion = stk_pop(game->gridStack);
-	while(tempUnion.i)stk_pop(game->gridStack);
-
+	stk_free(game->scoreStack);	
 	stk_free(game->gridStack);
 
 	free(game->files);
