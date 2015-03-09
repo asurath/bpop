@@ -102,7 +102,7 @@ void init_game(Game * game){
 	game->nfiles = 0;
 	game->score = 0;
 	game->loading = 1;	
-	
+	game->winScore = 0;	
 	return;
 }
 
@@ -665,6 +665,16 @@ int balloon_to_color(char balloon){
 
 }
 
+int convert_board(Game * game){
+
+	for(int i = 0; i < game->ncols; i++)
+		for(int n = 0; n < game->nrows; n++){
+			if(game->grid[n][i] == '.') game->grid[n][i] = ' ';
+			else game->winScore++;
+		}
+	
+}
+
 /**
  * Title: display_board(Game * game)
  * Description: Takes a pointer to the game variable as an argument and 
@@ -685,7 +695,6 @@ void display_board(Game * game){
 	char inp;
 	for(int i = 0; i < game->ncols; i++){
 		for(int n = 0; n < game->nrows; n++){
-			if(game->grid[n][i] == '.') game->grid[n][i] = ' ';
 			if(game->move.location.y == n && game->move.location.x == i)		
 				attron(COLOR_PAIR(5));
 			else
@@ -916,7 +925,7 @@ void has_won(Game * game){
 	if(!game->playing)
 		return;
 
-	if(game->score == game->nrows * game->ncols){
+	if(game->score == game->winScore){
 		clear();
 		move(5 , 5);
 		printw("Congratulations!, you won\n     Press any key to exit");

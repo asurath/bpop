@@ -75,6 +75,7 @@ typedef struct game {
 		int selection;
 		int loading;
 		int score;
+		int winScore;
 }Game;
 
 
