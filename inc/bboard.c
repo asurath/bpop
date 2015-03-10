@@ -624,11 +624,11 @@ int inject_rand_move(char *** grid, int nrows, int ncols, int size){
 		start = x;
 	}
 	
-	while(x <= start + size){
-		if(last_empty((*grid), nrows, x))	
-			insert_balloon(grid, x, nrows, color);
-		else if(start != x)
+	while(x < start + size){
+		if((!last_empty((*grid), nrows, x) && start != x ) ||(*grid)[0][x] == color || (*grid)[0][start - 1] == color )	
 			return 0;
+		else
+			insert_balloon(grid, x, nrows, color);
 		x++;
 	}
 
