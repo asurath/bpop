@@ -624,7 +624,7 @@ int inject_rand_move(char *** grid, int nrows, int ncols, int size){
 		start = x;
 	}
 	
-	while(x < start + size){
+	while(x <= start + size){
 		if(last_empty((*grid), nrows, x))	
 			insert_balloon(grid, x, nrows, color);
 		else if(start != x)
@@ -661,9 +661,9 @@ void build_random_board(char *** grid, int * nrows, int * ncols){
 
 	int size = 2;
 
-	*grid = create_2darr(10, 30);
+	*grid = create_2darr(10, 16);
 
-	*ncols = 30;	
+	*ncols = 16;	
 	*nrows = 10;	
 	
 	for(int i = 0; i < *ncols; i++)
