@@ -583,6 +583,70 @@ char get_rand_balloon(){
 	return '=';
 }
 
+int last_empty(char ** grid, int nrows, int x){
+	return (grid[nrows - 1][x] == ' ');
+}
+
+void insert_balloon(char *** grid, int x, int nrows, char color){
+
+	if((*grid)[0][x] != ' '){
+		for(int i = nrows - 1; i > 0; i--)
+			(*grid)[i][x] = (*grid)[i - 1][x];
+		(*grid)[0][x] = color;
+	}
+	else
+		(*grid)[0][x] = color;
+
+}
+
+
+/**
+ * Title:inject_rand_move(char ***grid, int nrows, int ncols)
+ * Description: injects a randomized move in the lowest row of the boar
+ * Arguments:
+ * 	char *** grid - pointer to grid array to inject move into
+ *	int nrows - integer with number of rows in grid
+ *	int ncols - integer with number of collumns in grid
+ * Returns:
+ * 	int isFull - a boolean indicating if the grid is full
+ */
+int inject_rand_move(char *** grid, int nrows, int ncols, int size){
+	
+	int x, start, check;
+	char color;	
+
+	color = get_rand_balloon();
+	x = rand() % ncols;
+	start = x;
+
+	while(start + size >= ncols ){
+		x = rand() % ncols;
+		start = x;
+	}
+	
+	while(x < start + size){
+		if(last_empty((*grid), nrows, x))	
+			insert_balloon(grid, x, nrows, color);
+		else if(start != x)
+			return 0;
+		x++;
+	}
+
+	return 1;
+}
+
+int has_top_space(char ** grid, int nrows, int ncols){
+	
+	int count = 0;
+	
+	for(int i = 0; i < ncols; i++)
+			if(grid[nrows - 1][i] == ' ')
+				count++;
+
+	return count;
+}
+
+
 /**
  * Title: build_random_board(char *** grid, int * nrows, int * ncols)
  * Description: Builds and sets all the necessary variables for a random board of dimensions set inside the function
@@ -595,6 +659,8 @@ char get_rand_balloon(){
  */
 void build_random_board(char *** grid, int * nrows, int * ncols){
 
+	int size = 2;
+
 	*grid = create_2darr(10, 30);
 
 	*ncols = 30;	
@@ -602,8 +668,12 @@ void build_random_board(char *** grid, int * nrows, int * ncols){
 	
 	for(int i = 0; i < *ncols; i++)
 		for(int n = 0; n < *nrows; n++)
-			(*grid)[n][i] = get_rand_balloon();
+			(*grid)[n][i] = ' ';
 	
+	while(has_top_space(*grid, *nrows, *ncols) > 1){
+		while(inject_rand_move(grid, *nrows, *ncols, size));
+
+	}	
 
 }
 
@@ -669,7 +739,7 @@ int convert_board(Game * game){
 
 	for(int i = 0; i < game->ncols; i++)
 		for(int n = 0; n < game->nrows; n++){
-			if(game->grid[n][i] == '.') game->grid[n][i] = ' ';
+			if(game->grid[n][i] == '.' || game->grid[n][i] == ' ') game->grid[n][i] = ' ';
 			else game->winScore++;
 		}
 	
