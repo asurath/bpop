@@ -616,19 +616,22 @@ int inject_rand_move(char *** grid, int nrows, int ncols, int size){
 	char color;	
 
 	color = get_rand_balloon();
-	x = rand() % ncols;
-	start = x;
 
-	while(start + size >= ncols ){
+	do{
 		x = rand() % ncols;
 		start = x;
-	}
-	
+	}while(start + size > ncols || (start % size));
+
 	while(x < start + size){
-		if((!last_empty((*grid), nrows, x) && start != x ) ||(*grid)[0][x] == color || (*grid)[0][start - 1] == color )	
+		if((!last_empty((*grid), nrows, x) && start != x ) ||(*grid)[0][x] == color 
+			|| (*grid)[0][start - 1] == color || (*grid)[0][start + size] == color  )	
 			return 0;
-		else
-			insert_balloon(grid, x, nrows, color);
+		x++;
+	}
+
+	x = start;
+	while(x < start + size){
+		insert_balloon(grid, x, nrows, color);
 		x++;
 	}
 
@@ -659,20 +662,20 @@ int has_top_space(char ** grid, int nrows, int ncols){
  */
 void build_random_board(char *** grid, int * nrows, int * ncols){
 
-	int size = 2;
+	*grid = create_2darr(6, 6);
 
-	*grid = create_2darr(10, 16);
-
-	*ncols = 16;	
-	*nrows = 10;	
+	*ncols = 6;	
+	*nrows = 6;	
+		
+	int size = *ncols - 1;
 	
 	for(int i = 0; i < *ncols; i++)
 		for(int n = 0; n < *nrows; n++)
 			(*grid)[n][i] = ' ';
 	
-	while(has_top_space(*grid, *nrows, *ncols) > 1){
+	while(has_top_space(*grid, *nrows, *ncols) > 1 && size){
 		while(inject_rand_move(grid, *nrows, *ncols, size));
-
+		size--;
 	}	
 
 }
@@ -773,7 +776,7 @@ void display_board(Game * game){
 			move(2 + n, 5 + i);
 
 			if(has_colors() && game->grid[n][i] != ' ')
-				printw("O");
+				printw("%c", 'o');
 			else
 				printw("%c", game->grid[n][i]);
 			
