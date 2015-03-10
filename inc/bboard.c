@@ -649,6 +649,17 @@ int has_top_space(char ** grid, int nrows, int ncols){
 	return count;
 }
 
+int has_adjacent(char ** grid, int nrows, int ncols){
+	
+	int count = 0;
+
+	for(int i = 1; i < ncols; i++)
+		if(grid[nrows - 1][i - 1] == grid[nrows - 1][i] && grid[nrows - 1][i] == ' ')
+			count++;
+
+	return count;	
+}
+
 
 /**
  * Title: build_random_board(char *** grid, int * nrows, int * ncols)
@@ -667,16 +678,16 @@ void build_random_board(char *** grid, int * nrows, int * ncols){
 	*ncols = 8;	
 	*nrows = 8;	
 		
-	int size = *ncols - 2;
+	int size = 5;
 	
 	for(int i = 0; i < *ncols; i++)
 		for(int n = 0; n < *nrows; n++)
 			(*grid)[n][i] = ' ';
 	
-	while(has_top_space(*grid, *nrows, *ncols) > 1 && size){
+	while(has_top_space(*grid, *nrows, *ncols) > 1 && has_adjacent(*grid, *nrows, *ncols)){
 		while(inject_rand_move(grid, *nrows, *ncols, size));
 		if(size != 2)
-			size-= 2;
+			size--;
 	}	
 
 }
