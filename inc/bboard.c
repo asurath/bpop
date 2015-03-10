@@ -662,12 +662,12 @@ int has_top_space(char ** grid, int nrows, int ncols){
  */
 void build_random_board(char *** grid, int * nrows, int * ncols){
 
-	*grid = create_2darr(6, 6);
+	*grid = create_2darr(8, 8);
 
-	*ncols = 6;	
-	*nrows = 6;	
+	*ncols = 8;	
+	*nrows = 8;	
 		
-	int size = *ncols - 1;
+	int size = *ncols - 2;
 	
 	for(int i = 0; i < *ncols; i++)
 		for(int n = 0; n < *nrows; n++)
@@ -675,7 +675,8 @@ void build_random_board(char *** grid, int * nrows, int * ncols){
 	
 	while(has_top_space(*grid, *nrows, *ncols) > 1 && size){
 		while(inject_rand_move(grid, *nrows, *ncols, size));
-		size--;
+		if(size != 2)
+			size-= 2;
 	}	
 
 }
