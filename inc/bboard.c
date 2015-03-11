@@ -675,13 +675,15 @@ void build_random_board(char *** grid, int * nrows, int * ncols){
 
 
 	if(*nrows == 0 || *ncols == 0){
-		*ncols = 10;	
+		*ncols = 11;	
 		*nrows = 10;	
 	}
 
 	*grid = create_2darr(*nrows, *ncols);
 		
-	int size = (*ncols / 2) + 1;
+	int size = *ncols / 2;
+	if(!(size % 2))
+		size - 1;
 	
 	for(int i = 0; i < *ncols; i++)
 		for(int n = 0; n < *nrows; n++)
