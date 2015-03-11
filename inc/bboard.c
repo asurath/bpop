@@ -20,15 +20,17 @@
 #define BLUE 2
 #define GREEN 3
 #define YELLOW 4
-#define CURSOR 5
+#define WHITE 5
+#define CURSOR 6
 #define MY_NONE '.'
 #define RED_BALLOON '^'
 #define BLUE_BALLOON '+'
 #define GREEN_BALLOON 'o'
-#define YELLOW_BALLOON '=' 
+#define YELLOW_BALLOON '='
+#define WHITE_BALLOON '-'
 #define NCOLORS 5
 
-static char Balloons[] = {MY_NONE, RED_BALLOON, BLUE_BALLOON, GREEN_BALLOON, YELLOW_BALLOON};
+static char Balloons[] = {MY_NONE, RED_BALLOON, BLUE_BALLOON, GREEN_BALLOON, YELLOW_BALLOON, WHITE_BALLOON};
  
  /**
  * Eats whitespace from input stream fptr until either
@@ -374,6 +376,7 @@ void ncurses_setup(){
 	init_pair(GREEN, COLOR_GREEN, COLOR_BLACK);
 	init_pair(BLUE, COLOR_BLUE, COLOR_BLACK);
 	init_pair(YELLOW, COLOR_YELLOW, COLOR_BLACK);
+	init_pair(WHITE, COLOR_WHITE, COLOR_BLACK);
 	init_pair(CURSOR, COLOR_BLUE, COLOR_WHITE);
 	clear();
 	
@@ -454,20 +457,20 @@ void get_files(Game * game){
 void display_load(Game * game){
 	
 		clear();
-		attron(COLOR_PAIR(2));
+		attron(COLOR_PAIR(BLUE));
 		move(2, 5);
 		printw("Please select a board to load using w as up,\n      s as down, e as enter and q as quit:");	
 		
 		move(4, 5);
 		if(0 == game->selection)
-			attron(COLOR_PAIR(1));
+			attron(COLOR_PAIR(RED));
 		printw("1. Random\n");
 		for(int i = 0; i < game->nfiles; i++){
 			move(5 + i, 5);
 			if(i == game->selection - 1)
-				attron(COLOR_PAIR(1));
+				attron(COLOR_PAIR(RED));
 			else
-				attron(COLOR_PAIR(2));
+				attron(COLOR_PAIR(BLUE));
 			printw("%i. %s\n", i + 2, game->files[i]);
 		}
 
@@ -570,7 +573,7 @@ void get_game_move(Game * game){
 char get_rand_balloon(){
 	
 	int num;
-	num = rand() % 4;
+	num = rand() % 5;
 	if(!num)
 		return '^';
 	if(num == 1)
@@ -579,7 +582,8 @@ char get_rand_balloon(){
 		return '=';
 	if(num == 3)
 		return 'o';
-
+	if(num == 4)
+		return '-';
 	return '=';
 }
 
@@ -620,7 +624,7 @@ int inject_rand_move(char *** grid, int nrows, int ncols, int size){
 	do{
 		x = rand() % ncols;
 		start = x;
-	}while(start + size > ncols || start % size);
+	}while(start + size > ncols);
 
 	while(x < start + size){
 		if((!last_empty((*grid), nrows, x) && start != x ) ||(*grid)[0][x] == color 
@@ -675,8 +679,8 @@ void build_random_board(char *** grid, int * nrows, int * ncols){
 
 
 	if(*nrows == 0 || *ncols == 0){
-		*ncols = 11;	
-		*nrows = 10;	
+		*ncols = 8;	
+		*nrows = 8;	
 	}
 
 	*grid = create_2darr(*nrows, *ncols);
@@ -689,7 +693,7 @@ void build_random_board(char *** grid, int * nrows, int * ncols){
 		for(int n = 0; n < *nrows; n++)
 			(*grid)[n][i] = ' ';
 	
-	while(has_top_space(*grid, *nrows, *ncols) > 1 && has_adj_space(*grid, *nrows, *ncols)){
+	while(has_adj_space(*grid, *nrows, *ncols)){
 		while(inject_rand_move(grid, *nrows, *ncols, size));
 		if(size != 2)
 			size--;
@@ -748,6 +752,8 @@ int balloon_to_color(char balloon){
 			return 3;
 		case 'o':
 			return 4;
+		case '-':
+			return 5;
 		default:
 			return 0;
 	}
@@ -786,7 +792,7 @@ void display_board(Game * game){
 	for(int i = 0; i < game->ncols; i++){
 		for(int n = 0; n < game->nrows; n++){
 			if(game->move.location.y == n && game->move.location.x == i)		
-				attron(COLOR_PAIR(5));
+				attron(COLOR_PAIR(CURSOR));
 			else
 				attron(COLOR_PAIR(balloon_to_color(game->grid[n][i])));
 			
@@ -797,11 +803,11 @@ void display_board(Game * game){
 			else
 				printw("%c", game->grid[n][i]);
 			
-			attron(COLOR_PAIR(2));
+			attron(COLOR_PAIR(BLUE));
 		}
 	}	
 
-	attron(COLOR_PAIR(2));
+	attron(COLOR_PAIR(BLUE));
 	move(4 + game->nrows, 5);
 	printw("Score: %i\n", game->score);
 	move(5 + game->nrows, 5);
