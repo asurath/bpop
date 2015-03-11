@@ -620,7 +620,7 @@ int inject_rand_move(char *** grid, int nrows, int ncols, int size){
 	do{
 		x = rand() % ncols;
 		start = x;
-	}while(start + size > ncols || (start % size));
+	}while(start + size > ncols || start % size);
 
 	while(x < start + size){
 		if((!last_empty((*grid), nrows, x) && start != x ) ||(*grid)[0][x] == color 
@@ -649,7 +649,7 @@ int has_top_space(char ** grid, int nrows, int ncols){
 	return count;
 }
 
-int has_adjacent(char ** grid, int nrows, int ncols){
+int has_adj_space(char ** grid, int nrows, int ncols){
 	
 	int count = 0;
 
@@ -673,18 +673,21 @@ int has_adjacent(char ** grid, int nrows, int ncols){
  */
 void build_random_board(char *** grid, int * nrows, int * ncols){
 
-	*grid = create_2darr(8, 8);
 
-	*ncols = 8;	
-	*nrows = 8;	
+	if(*nrows == 0 || *ncols == 0){
+		*ncols = 10;	
+		*nrows = 10;	
+	}
+
+	*grid = create_2darr(*nrows, *ncols);
 		
-	int size = 5;
+	int size = (*ncols / 2) + 1;
 	
 	for(int i = 0; i < *ncols; i++)
 		for(int n = 0; n < *nrows; n++)
 			(*grid)[n][i] = ' ';
 	
-	while(has_top_space(*grid, *nrows, *ncols) > 1 && has_adjacent(*grid, *nrows, *ncols)){
+	while(has_top_space(*grid, *nrows, *ncols) > 1 && has_adj_space(*grid, *nrows, *ncols)){
 		while(inject_rand_move(grid, *nrows, *ncols, size));
 		if(size != 2)
 			size--;
