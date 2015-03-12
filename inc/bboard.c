@@ -627,8 +627,8 @@ int inject_rand_move(char *** grid, int nrows, int ncols, int size){
 	}while(start + size > ncols);
 
 	while(x < start + size){
-		if((!last_empty((*grid), nrows, x) && start != x ) ||(*grid)[0][x] == color 
-			|| (*grid)[0][start - 1] == color || (*grid)[0][start + size] == color  )	
+		if(!last_empty((*grid), nrows, x) ||(*grid)[0][x] == color 
+			|| (*grid)[0][start - 1] == color || (*grid)[0][start + size] == color)	
 			return 0;
 		x++;
 	}
