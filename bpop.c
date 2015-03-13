@@ -50,12 +50,15 @@ int main() {
 			get_load_move(&game);	
 			
 			//If valid board then load it
-			if(!game.loading && game.playing){
+			if(!game.loading && game.playing)
 				load_board(&game);
-				convert_board(&game);
-			}
 			
+			if(game.playing)
+				convert_board(&game);
+
+	
 		}
+		
 		//In game loop
 		while(game.playing){		
 			//Display the board
