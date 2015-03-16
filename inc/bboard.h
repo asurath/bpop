@@ -350,7 +350,26 @@ void get_score(Game * game);
  * Arguments:
  * 	Game * game - Game data structure containing all dynamically
  * 		allocated pointers
+ * Returns:
+ * 	void
  * Called in: bpop.c
  * 		function: main()
  */
 void cleanup(Game * game);
+
+/**
+ * Title: convert_board(Game * game)
+ * Description: takes a pointer to the game variable and uses the grid 
+ * 		property to count the number of valid moves in the board
+ * 		and save the winning score requirement to the winScore
+ * 		property. The function also converts any empty balloon
+ * 		holder spaces into ascii space characters.
+ * Arguments:
+ * 	Game * game - ptr to game data structure containing the initialized
+ * 		grid in the grid property to count and convert
+ * Returns:
+ * 	void
+ * Called in: bpop.c
+ * 		function: main() - loading loop
+ */
+void convert_board(Game * game);

@@ -761,7 +761,7 @@ int balloon_to_color(char balloon){
 
 }
 
-int convert_board(Game * game){
+void convert_board(Game * game){
 
 	for(int i = 0; i < game->ncols; i++)
 		for(int n = 0; n < game->nrows; n++){
@@ -769,6 +769,7 @@ int convert_board(Game * game){
 			else game->winScore++;
 		}
 	
+	return;
 }
 
 /**
