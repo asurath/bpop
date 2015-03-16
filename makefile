@@ -5,3 +5,7 @@ bboard:
 	gcc -std=c99 inc/bboard.c -c -o inc/bboard.o -lncurses
 bpop:astack bboard
 	gcc -std=c99 bpop.c -g -o bpop inc/astack.o inc/bboard.o -lncurses
+install:
+	sudo yum install gcc
+	sudo yum install ncurses-devel
+	make
