@@ -587,10 +587,25 @@ char get_rand_balloon(){
 	return '=';
 }
 
+/**
+ * Title: last_empty(char ** grid, int nrows, int x);
+ * Description: takes a grid and its number of rows along with a collumn
+ * 		index in the grid and a boolean corresponding to 
+ * 		if its last value is a balloon or empty space
+ * Returns:
+ * 	int isEmpty - true for last row of collumn passed is empty, false else
+ * Called in: inject_rand_move()
+ */	
 int last_empty(char ** grid, int nrows, int x){
 	return (grid[nrows - 1][x] == ' ');
 }
 
+/**
+ * Title: insert_balloon(char *** grid, int x, int nrows, char color);
+ * Description: TODO
+ * Returns:TODO
+ * Called in: TODO
+ */
 void insert_balloon(char *** grid, int x, int nrows, char color){
 
 	if((*grid)[0][x] != ' '){
@@ -642,6 +657,17 @@ int inject_rand_move(char *** grid, int nrows, int ncols, int size){
 	return 1;
 }
 
+/**
+ * Title:has_top_space(char ** grid, int nrows, int ncols);
+ * Description: returns an integer of the number of collumns whose last space
+ * 		is empty otherwise false
+ * Arguments:
+ * 		char ** grid - a 2x2 character array of a game grid
+ * 		int nrows - the number of rows in the grid array argument
+ * 		int ncols - the number of collumns in the grid array argument
+ * Returns:
+ * 		int count - the number of collumns with empty top space
+ */
 int has_top_space(char ** grid, int nrows, int ncols){
 	
 	int count = 0;
@@ -653,6 +679,18 @@ int has_top_space(char ** grid, int nrows, int ncols){
 	return count;
 }
 
+/**
+ * Title: has_adj_space(char ** grid, int nrows, int ncols);
+ * Description: returns the number of collumns which have empty adjacent
+ *		space
+ * Arguments:
+ * 		char ** grid - a 2x2 character array of a game grid
+ * 		int nrows - the number of rows in the grid argument array
+ * 		int ncols - the number of collumns in the grid argument array
+ * Returns:
+ * 		int count - the number of columns which have empty adjacent
+ * 				space
+ */
 int has_adj_space(char ** grid, int nrows, int ncols){
 	
 	int count = 0;
@@ -761,6 +799,21 @@ int balloon_to_color(char balloon){
 
 }
 
+/**
+ * Title: convert_board(Game * game)
+ * Description: takes a pointer to the game variable and uses the grid 
+ * 		property to count the number of valid moves in the board
+ * 		and save the winning score requirement to the winScore
+ * 		property. The function also converts any empty balloon
+ * 		holder spaces into ascii space characters.
+ * Arguments:
+ * 	Game * game - ptr to game data structure containing the initialized
+ * 		grid in the grid property to count and convert
+ * Returns:
+ * 	void
+ * Called in: bpop.c
+ * 		function: main() - loading loop
+ */
 void convert_board(Game * game){
 
 	for(int i = 0; i < game->ncols; i++)
